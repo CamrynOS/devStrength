@@ -6,6 +6,7 @@
     --background-clr: #f5f5f5;
     --text-clr: #212121;
     --card-background-clr: #ffffff;
+    --nav-clr: #e0e0e0;
 }
 
 * {
@@ -22,6 +23,94 @@ body {
     min-height: 100dvh;
     background-color: var(--background-clr);
     color: var(--text-clr);
+    display: grid; /* makes sidebar and main content side by side */
+    grid-template-columns: auto 1fr; /* sidebar takes up auto width, main content takes up remaining space */
+}
+
+#sidebar {
+    height: 100vh;
+    width: 250px;
+    padding: 5px 1em;
+    border-right: 1px solid var(--text-clr);
+    background-color: var(--nav-clr);
+
+    position: sticky; /* keeps sidebar in place when scrolling */
+    top: 0; 
+    align-self: start; /* makes sidebar start at top left */
+    transition: 300ms ease-in-out;
+    overflow: hidden; /* hides overflowing text when sidebar is closed */
+    text-wrap: nowrap; /* makes sure text doesn't wrap on close */
+}
+
+#sidebar.close {
+    padding: 5px;
+    width: 60px;   
+}
+
+#sidebar ul {
+    list-style: none;
+}
+
+#sidebar ul li:first-child {
+    display: flex; /* makes app name and icon align properly */
+    justify-content: flex-end; /* pushes app name to the right */
+    margin-bottom: 16px;
+    #app-name {
+        font-weight: 600;
+    }
+}
+
+/* changes color of active link in sidebar */
+#sidebar ul li.active a {
+    color: var(--secondary-clr);
+    
+    svg {
+        fill: var(--secondary-clr);
+    }
+}
+
+#sidebar a, #sidebar #app-name {
+    padding: .85em; 
+    text-decoration: none;
+    color: var(--text-clr);
+    display: flex;
+    align-items: center; /* vertically centers icon and text */
+    gap: 1em; /* space between icon and text */
+}
+
+#sidebar svg {
+    flex-shrink: 0; /* prevents icon from shrinking */
+}
+
+#sidebar a:hover {
+    background-color: var(--primary-clr);
+    color: white;
+    border-radius: .5em;
+
+    svg {
+        fill: white;
+    }
+}
+
+#toggle-btn {
+    margin-left: auto;
+    padding: 1em;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: .5em;
+
+    svg {
+        transition: rotate 150ms ease; /* adds rotation transition to icon */
+    }
+}
+
+#toggle-btn:hover {
+    background-color: var(--primary-clr);
+
+    svg {
+        fill: white;
+    }
 }
 
 main {
