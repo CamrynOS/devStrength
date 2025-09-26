@@ -128,7 +128,7 @@ main {
     padding: 10px 20px;
 }
 
-#widgets-container {
+.widgets-container {
     width: 100vw;
     margin: 20px auto;
     display: flex;
@@ -145,4 +145,71 @@ main {
 .card-shadow-radius {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#add-workout-btn {
+    background-color: var(--primary-clr);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#add-workout-btn:hover {
+    background-color: var(--secondary-clr);
+    transform: scale(1.05);
+}
+
+input, textarea, button {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--text-clr);
+    border-radius: .5em;
+    font-family: 'Poppins', sans-serif;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-clr);
+    box-shadow: 0 0 5px var(--primary-clr);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+textarea {
+    resize: none;
+}
+
+#workout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background-color: var(--card-background-clr);
+    width: 400px;
+}
+
+#workout-form label {
+    text-align: left;
+    font-weight: 600;
+}
+
+#full-workout {
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background-color: var(--card-background-clr);
+    width: 400px;
+}
+
+#save-workout-btn {
+    background-color: var(--primary-clr);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
 }
