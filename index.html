@@ -34,24 +34,33 @@
                     <span>Change Schedule</span>
                 </li>
             </ul>
-        <div id="dashboard" class="page">
-            <h1 class="page-title">Dashboard</h1>
-            <div id="streak-container">
-                <h2>0 Day Streak</h2> <!-- Placeholder for dynamic streak count -->
-            </div>
-            <div id="widgets-container">
-                <div class="widget">
-                    <h3>Last Workout</h3>
+        </nav>
+        <main>
+            <div id="dashboard" class="page">
+                <h1 class="page-title">Dashboard</h1>
+                <div id="streak-container" class="card-shadow-radius">
+                    <h2>0 Day Streak</h2> <!-- Placeholder for dynamic streak count -->
                 </div>
-                <div class="widget">
-                    <h3>Todays Workout</h3>
+                <div id="widgets-container">
+                    <div>
+                        <h2 class="widget-header">Last Workout</h2>
+                        <div class="widget card-shadow-radius">
+                            <p>No workouts logged yet.</p> <!-- Placeholder for last workout details -->
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="widget-header">Today's Workout</h2>
+                        <div class="widget card-shadow-radius">
+                            <p>No workouts logged yet.</p> <!-- Placeholder for todays workout details -->
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="addWorkout" class="page" style="display: none;"></div>
-        <div id="history" class="page" style="display: none;"></div>
-        <div id="stats" class="page" style="display: none;"></div>
-        <div id="changeSchedule" class="page" style="display: none;"></div>
-        <script src="script.js"></script>
+            <div id="addWorkout" class="page" style="display: none;"></div>
+            <div id="history" class="page" style="display: none;"></div>
+            <div id="stats" class="page" style="display: none;"></div>
+            <div id="changeSchedule" class="page" style="display: none;"></div>
+            <script src="script.js"></script>
+        </main>
     </body>
 </html>
