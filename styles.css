@@ -147,7 +147,11 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#add-workout-btn {
+#last-workout {
+    padding: 20px;
+}
+
+#add-workout-btn, #save-workout-btn {
     background-color: var(--primary-clr);
     color: white;
     border: none;
@@ -155,7 +159,7 @@ main {
     cursor: pointer;
 }
 
-#add-workout-btn:hover {
+#add-workout-btn:hover, #save-workout-btn:hover {
     background-color: var(--secondary-clr);
     transform: scale(1.05);
 }
@@ -198,18 +202,54 @@ textarea {
     font-weight: 600;
 }
 
-#full-workout {
+#workout-summary {
+    background-color: var(--card-background-clr);
+    padding: 20px;
+    width: 400px;
+    display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 20px;
-    background-color: var(--card-background-clr);
-    width: 400px;
 }
 
 #save-workout-btn {
-    background-color: var(--primary-clr);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+    margin-top: auto;
 }
+
+#history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--card-background-clr);
+}
+
+#history-table th, #history-table td {
+    border: 1px solid var(--text-clr);
+    padding: 8px;
+}
+
+#history-table th {
+    background-color: var(--secondary-clr);
+}
+
+.table-btn {
+    background-color: var(--primary-clr);
+    color: var(--text-clr);
+    border: none;
+    padding: 15px 10px;
+    cursor: pointer;
+    border-radius: .5em;
+    width: 100px;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.table-btn:hover {
+    background-color: var(--secondary-clr);
+    transform: scale(1.05);
+}
+
+#delete-btn {
+    background-color: #e53935;
+}
+
+#history-list {
+}   

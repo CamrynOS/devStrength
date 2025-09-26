@@ -1,10 +1,22 @@
+// navigation 
 const toggleBtn = document.getElementById('toggle-btn');
 const sidebar = document.getElementById('sidebar');
+
+// adding and saving workouts
 const addWorkoutBtn = document.getElementById('add-workout-btn');
 const saveWorkoutBtn = document.getElementById('save-workout-btn');
 const workoutForm = document.getElementById('workout-form');
 
+// loading dashboard workouts
+const lastWorkoutDiv = document.getElementById('last-workout');
+
+// loading table history
+const deleteBtn = document.getElementById('delete-btn');
+const viewBtn = document.getElementById('view-btn');
+
+
 let currentWorkout = [];
+let numOfWorkouts = 0;
 
 function toggleSidebar() {
     sidebar.classList.toggle('close');
@@ -41,10 +53,16 @@ workoutForm.addEventListener('submit', function(event) {
         rpe: document.getElementById('rpe').value,
         notes: document.getElementById('notes').value
     };
-
+    
     currentWorkout.push(currentExercise); // add current exercise to the workout array
     loadWorkoutSummary();
-    this.reset(); // reset form
+    workoutForm.elements[0].readOnly = true; // make date field read-only after first entry
+    workoutForm.elements[1].readOnly = true; // make name field read-only after first entry
+    for (let i = 2; i < workoutForm.elements.length; i++) {
+        if (workoutForm.elements[i].type !== 'submit') {
+            workoutForm.elements[i].value = ''; // clear the form fields
+        }
+    }
 });
 
 saveWorkoutBtn.addEventListener('click', function() {
@@ -55,14 +73,18 @@ saveWorkoutBtn.addEventListener('click', function() {
 
     let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
     workouts.push({
-        date: new Date().toLocaleDateString(),
-        exercises: currentWorkout
+        date: currentWorkout[0].date,
+        routine: currentWorkout
     })
 
     localStorage.setItem('workouts', JSON.stringify(workouts)); // save back to localStorage
     currentWorkout = [];
+    workoutForm.elements[0].readOnly = false; // make date field editable for new session
+    workoutForm.elements[1].readOnly = false; // make name field editable for new session
     loadWorkoutSummary();
     loadHistory();
+    loadLastWorkout();
+    numOfWorkouts++;
     alert('Workout session saved');
 });
 
@@ -87,22 +109,62 @@ function loadHistory() {
 
     let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
 
+    workouts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     workouts.forEach((workout, index) => {
         historyList.innerHTML += `
-            <button onclick="loadWorkoutDetail(${index})">
-                <strong>${workout.date}</strong>
-            </button>
+            <tr class="detail-row">
+                <td>${workout.date}</td>
+                <td>${workout.routine[0].name}</td>
+                <td>${workout.routine.length}</td>
+                <td><button onclick="toggleDetails(${index})" class="table-btn" id="view-btn">View</button><button onclick="deleteWorkout(${index})" class="table-btn" id="delete-btn">Delete</button></td>
+            </tr>
+            <tr class="full-detail-row" id="detail-${index}" style="display: none;">
+                <td colspan="4">
+                    ${workout.routine.map(ex => `
+                        <div>
+                            <strong>${ex.exercise}</strong> - ${ex.sets}x${ex.reps} @ ${ex.weight}lbs (RPE: ${ex.rpe})<em>(${ex.date})</em>
+                            <p>${ex.notes}</p>
+                        </div>
+                    `).join('')}
+                </td>
+            </tr>
         `;
     });
 }
+
+function deleteWorkout(index) {
+    let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+    if (index < 0 || index >= workouts.length) {
+        alert('Invalid workout index');
+        return;
+    }
+    if (confirm(`Are you sure you want to delete the workout on ${workouts[index].date}?`)) {
+        workouts.splice(index, 1); // remove the workout at the specified index
+        localStorage.setItem('workouts', JSON.stringify(workouts)); // save back to localStorage
+        loadHistory(); // refresh the history list
+        loadLastWorkout(); // refresh the last workout display
+        alert('Workout deleted');
+    }
+}
+
+function toggleDetails(index) {
+    const detailRow = document.getElementById(`detail-${index}`);
+    if (detailRow.style.display === 'none') {
+        detailRow.style.display = 'table-row';
+    } else {
+        detailRow.style.display = 'none';
+    }
+}
+
 
 function loadWorkoutDetail(index) {
     let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
     const workout = workouts[index];
 
-    let detailHtml = `<h2>Workout on ${workout.date}</h2>`;
+    let detailHtml = `<h2>Workout on ${workout.routine[0].date}</h2>`;
     
-    workout.exercises.forEach(ex => {
+    workout.routine.forEach(ex => {
         detailHtml += `
             <div>
                 <strong>${ex.exercise}</strong> - ${ex.sets}x${ex.reps} @ ${ex.weight}lbs (RPE: ${ex.rpe})<em>(${ex.date})</em><p>${ex.notes}</p>
@@ -121,6 +183,26 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
+function loadLastWorkout() {
+    let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+    let lastWorkout;
+    let detailHtml = `<p>No workouts logged yet.</p>`;
+    if (workouts.length > 0) {
+        workouts.forEach(workout => {
+            if (new Date(workout.date) > new Date((lastWorkout && lastWorkout.date) || 0)) {
+                lastWorkout = workout;
+            }
+        });
+        detailHtml = `<h2>${lastWorkout.routine[0].name} on ${lastWorkout.routine[0].date}</h2>`;
 
+        lastWorkout.routine.forEach(ex => {
+            detailHtml += `
+                    <strong>${ex.exercise}</strong> - ${ex.sets} sets x ${ex.reps} reps @ ${ex.weight}lbs (RPE: ${ex.rpe})<p>${ex.notes}</p>
+            `;
+        });
+    }
+    lastWorkoutDiv.innerHTML = detailHtml;
+}
 
-window.onload = loadHistory;
+window.onload = loadLastWorkout();
+window.onload = loadHistory();
