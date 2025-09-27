@@ -251,5 +251,25 @@ textarea {
     background-color: #e53935;
 }
 
-#history-list {
-}   
+.filters {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 0;
+}
+
+.filters select {
+    margin: 0 10px;
+    padding: 8px;
+    border: 1px solid var(--text-clr);
+    border-radius: .5em;
+    font-family: 'Poppins', sans-serif;
+}
+
+#search-bar {
+    width: 300px;
+    padding: 8px;
+    border: 1px solid var(--text-clr);
+    border-radius: .5em;
+    font-family: 'Poppins', sans-serif;
+    margin-left: 20px;
+}
