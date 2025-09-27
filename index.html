@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="styles.css">
+        <meta charset="UTF-8">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
         <nav id="sidebar">
@@ -152,25 +154,27 @@
                 <div id="stats-summary" class="widgets-container">
                     <div id="graph-container" class="card-shadow-radius widget">
                         <h3>Weight Lifted Over Time</h3>
+                        <canvas id="stats-graph"></canvas>
+                            
                     </div>
                     <div id="stats-overview">
                         <div id="total-workouts-sets" class="stat-card">
                             <h4>Total Workouts</h4>
-                            <p id="total-workouts">0</p> <!-- Placeholder for dynamic total workouts -->
-                            <p id="total-sets">0 Sets</p> <!-- Placeholder for dynamic total sets -->
+                            <p id="total-workouts"></p> <!-- Placeholder for dynamic total workouts -->
+                            <p id="total-sets"></p> <!-- Placeholder for dynamic total sets -->
                         </div>
-                        <div id="total-volume" class="stat-card">
+                        <div class="stat-card" id="total-volume">
                             <h4>Total Volume</h4>
-                            <p id="total-volume">0 lbs</p> <!-- Placeholder for dynamic total volume -->
+                            <p id="total-volumes"></p> <!-- Placeholder for dynamic total volume -->
                         </div>
                         <div id="average-rpe" class="stat-card">
                             <h4>Average RPE</h4>
-                            <p id="average-rpe">0</p> <!-- Placeholder for dynamic average RPE -->
+                            <p id="average-rpes"></p> <!-- Placeholder for dynamic average RPE -->
                         </div>
                         <div id="top-exercise-weight" class="stat-card">
                             <h4>Top Exercise</h4>
-                            <p id="top-exercise">0 sets</p> 
-                            <p id="max-weight">0 lbs</p>
+                            <p id="top-exercise"></p> 
+                            <p id="max-weight"></p>
                         </div>
                         </div>
                     </div>

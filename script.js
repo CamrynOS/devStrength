@@ -25,10 +25,25 @@ const currentScheduleContainer = document.getElementById('current-schedule');
 const editScheduleDiv = document.getElementById('edit-schedule');
 const scheduleInputs = document.getElementsByClassName('schedule-input');
 
+// populating stats
+const exerciseFilter = document.getElementById('exercise-filter');
+const totalWorkoutsSpan = document.getElementById('total-workouts');
+const totalSetsSpan = document.getElementById('total-sets');
+const totalRepsSpan = document.getElementById('total-reps');
+const totalVolumeSpan = document.getElementById('total-volume');
+const avgRPESpan = document.getElementById('avg-rpe');
+const maxWeightSpan = document.getElementById('max-weight');
+const topExerciseSpan = document.getElementById('top-exercise');
+const totalWorkoutsCard = document.getElementById('total-workouts-sets');
+const totalVolumeCard = document.getElementById('total-volume');
+const averageRPECard = document.getElementById('average-rpe');
+const topExerciseCard = document.getElementById('top-exercise-weight');
+
 // global variables
 let currentWorkout = [];
 let dayStreak = 0;
 let numOfWorkouts = 0;
+let statsChart;
 
 function toggleSidebar() {
     sidebar.classList.toggle('close');
@@ -333,6 +348,71 @@ function loadCurrentSchedule() {
     }
 }
 
+function addStats() {
+    let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+    const query = exerciseFilter.value.toLowerCase();
+
+    let filteredExercises = [];
+    workouts.forEach(workout => {
+        workout.routine.forEach(ex => {
+            if (query.toLowerCase() === 'all' || ex.exercise.toLowerCase().includes(query)) {
+                filteredExercises.push(ex);
+            }
+        });
+    });
+
+    const totalWorkouts = new Set(filteredExercises.map(ex => ex.date)).size;
+    const totalSets = filteredExercises.reduce((sum, ex) => sum + parseInt(ex.sets), 0);
+    const totalReps = filteredExercises.reduce((sum, ex) => sum + (parseInt(ex.sets) * parseInt(ex.reps)), 0);
+    const totalVolume = filteredExercises.reduce((sum, ex) => sum + (parseInt(ex.sets) * parseInt(ex.reps) * parseInt(ex.weight)), 0);
+    const avgRPE = filteredExercises.length > 0 ? (filteredExercises.reduce((sum, ex) => sum + parseFloat(ex.rpe), 0) / filteredExercises.length).toFixed(2) : 0;
+    let maxWeight = Math.max(...filteredExercises.map(ex => parseInt(ex.weight)), 0);
+    let topExercise = filteredExercises.find(ex => totalSets === Math.max(...filteredExercises.map(e => parseInt(e.sets))))?.exercise || 'N/A';
+    
+    if (query.toLowerCase() !== 'all' && !workouts.some(workout => workout.routine.some(ex => ex.exercise.toLowerCase().includes(query)))) {
+        alert('No matching exercises found for the selected filter.');
+    } else if (query.toLowerCase() === 'all') {
+        totalWorkoutsCard.innerHTML = `<h4>Total Workouts</h4><p id="total-workouts">${totalWorkouts}</p>`;
+        totalVolumeCard.innerHTML = `<h4>Total Volume</h4><p id="total-volume">${totalVolume} lbs</p>`;
+        averageRPECard.innerHTML = `<h4>Average RPE</h4><p id="average-rpe">${avgRPE}</p>`;
+        topExerciseCard.innerHTML = `<h4>Top Exercise</h4><p id="top-exercise">${topExercise}</p>`;
+    } else if (query !== ''){
+        totalWorkoutsCard.innerHTML = `<h4>Total Sets</h4><p id="total-sets">${totalSets} sets</p>`;
+        totalVolumeCard.innerHTML = `<h4>Total Volume</h4><p id="total-volume">${totalVolume} lbs</p>`;
+        averageRPECard.innerHTML = `<h4>Average RPE</h4><p id="average-rpe">${avgRPE}</p>`;
+        topExerciseCard.innerHTML = `<h4>Max Weight</h4><p id="max-weight">${maxWeight} lbs</p>`;
+    }
+    return {filteredExercises, query};
+}
+
+
+function addGraph(filteredExercises, query) {
+    const ctx = document.getElementById('stats-graph').getContext('2d');
+    filteredExercises.sort((a, b) => new Date(a.date) - new Date(b.date)); // sort by date
+    if (statsChart) {
+        statsChart.destroy(); // destroy previous chart instance if it exists
+    }
+    statsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: filteredExercises.map(ex => ex.date),
+            datasets: [{
+                label: query || 'All Exercises',
+                data: filteredExercises.map(ex => ex.weight),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.3
+            }]
+        }
+    });
+
+}
+
+function updateStats() {
+    const {filteredExercises, query} = addStats();
+    addGraph(filteredExercises, query);
+}
+
+exerciseFilter.addEventListener('change', updateStats);
 
 onload = function() {
     showPage('dashboard');
