@@ -132,7 +132,39 @@
 
                 </div>
             </div>
-            <div id="stats" class="page" style="display: none;"></div>
+            <div id="stats" class="page" style="display: none;">
+                <h1 class="page-title">Stats</h1>
+                <div class="card-shadow-radius widget" id="stats-filters">
+                    <h2>View Stats For:</h2>
+                    <input type="input" id="exercise-filter" placeholder="Enter exercise name (e.g., Squats)">
+                </div>
+                <div id="stats-summary" class="widgets-container">
+                    <div id="graph-container" class="card-shadow-radius widget">
+                        <h3>Weight Lifted Over Time</h3>
+                    </div>
+                    <div id="stats-overview">
+                        <div id="total-workouts-sets" class="stat-card">
+                            <h4>Total Workouts</h4>
+                            <p id="total-workouts">0</p> <!-- Placeholder for dynamic total workouts -->
+                            <p id="total-sets">0 Sets</p> <!-- Placeholder for dynamic total sets -->
+                        </div>
+                        <div id="total-volume" class="stat-card">
+                            <h4>Total Volume</h4>
+                            <p id="total-volume">0 lbs</p> <!-- Placeholder for dynamic total volume -->
+                        </div>
+                        <div id="average-rpe" class="stat-card">
+                            <h4>Average RPE</h4>
+                            <p id="average-rpe">0</p> <!-- Placeholder for dynamic average RPE -->
+                        </div>
+                        <div id="top-exercise-weight" class="stat-card">
+                            <h4>Top Exercise</h4>
+                            <p id="top-exercise">0 sets</p> 
+                            <p id="max-weight">0 lbs</p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="changeSchedule" class="page" style="display: none;"></div>
             <script src="script.js"></script>
         </main>

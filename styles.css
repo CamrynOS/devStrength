@@ -251,5 +251,45 @@ textarea {
     background-color: #e53935;
 }
 
-#history-list {
-}   
+#delete-btn:hover {
+    background-color: #ab000d;
+    transform: scale(1.05);
+}
+
+#stats-filters {
+    width: 100vw;
+    text-align: left;
+    margin: 20px 10px;
+    padding: 20px;
+}
+
+#stats-filters input {
+    width: 80%;
+}
+
+#stats-summary {
+    border: 2px solid black;
+    height: 65vh;
+}
+
+#graph-container {
+    margin: 20px 0 20px -20px;
+    padding: 10px;
+}
+
+#stats-overview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    width: 300px;
+}
+
+.stat-card {
+    background-color: var(--card-background-clr);
+    padding: 10px;
+    width: 140px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+}
