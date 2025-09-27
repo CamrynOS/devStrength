@@ -9,6 +9,7 @@ const workoutForm = document.getElementById('workout-form');
 
 // loading dashboard workouts
 const lastWorkoutDiv = document.getElementById('last-workout');
+const todaysWorkoutDiv = document.getElementById('todays-workout');
 
 // loading table history
 const searchBtn = document.getElementById('search-btn');
@@ -16,8 +17,17 @@ const searchInput = document.getElementById('search-bar');
 const sortOptions = document.getElementById('sort-options');
 const historyTable = document.getElementById('history-table');
 
+// editing schedule
+const editScheduleBtn = document.getElementById('edit-schedule-btn');
+const saveScheduleBtn = document.getElementById('save-schedule-btn');
+const currentScheduleDiv = document.getElementById('current-schedule-div');
+const currentScheduleContainer = document.getElementById('current-schedule');
+const editScheduleDiv = document.getElementById('edit-schedule');
+const scheduleInputs = document.getElementsByClassName('schedule-input');
 
+// global variables
 let currentWorkout = [];
+let dayStreak = 0;
 let numOfWorkouts = 0;
 
 function toggleSidebar() {
@@ -209,6 +219,22 @@ function loadLastWorkout() {
     lastWorkoutDiv.innerHTML = detailHtml;
 }
 
+function loadTodaysWorkout() {
+    const today = new Date();
+    const dayOfWeekNumber = today.getDay();
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayOfWeek = daysOfWeek[dayOfWeekNumber];
+    
+    const savedSchedule = JSON.parse(localStorage.getItem('schedule'));
+    let detailHtml = `<p>No workout scheduled for today.</p>`;
+
+    if (savedSchedule && savedSchedule[dayOfWeek]) {
+        detailHtml = `<p>${dayOfWeek}: ${savedSchedule[dayOfWeek]}!</p>`;
+    }
+    
+    todaysWorkoutDiv.innerHTML = detailHtml;
+}
+
 function sortHistory() {
     let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
     const sortBy = sortOptions.value;
@@ -254,8 +280,64 @@ function searchHistory() {
 searchInput.addEventListener('input', searchHistory);
 sortOptions.addEventListener('change', sortHistory);
 
+editScheduleBtn.addEventListener('click', function() {
+    currentScheduleContainer.style.display = 'none';
+    currentScheduleDiv.style.display = 'none';
+    editScheduleDiv.style.display = 'block';
+    editScheduleBtn.style.display = 'none';
+});
+
+saveScheduleBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    const currentSchedule = {
+        Monday: scheduleInputs[0].value,
+        Tuesday: scheduleInputs[1].value,
+        Wednesday: scheduleInputs[2].value,
+        Thursday: scheduleInputs[3].value,
+        Friday: scheduleInputs[4].value,
+        Saturday: scheduleInputs[5].value,
+        Sunday: scheduleInputs[6].value
+    };
+    localStorage.setItem('schedule', JSON.stringify(currentSchedule));
+    let scheduleHtml = '<h2>Current Schedule</h2><ul>';
+    for (const [day, activity] of Object.entries(currentSchedule)) {
+        scheduleHtml += `<li>${day}: ${activity}</li>`;
+        scheduleInputs[Object.keys(currentSchedule).indexOf(day)].value = activity; // update input fields
+    }
+    scheduleHtml += '</ul>';
+    
+    currentScheduleDiv.innerHTML = scheduleHtml;
+    currentScheduleContainer.style.display = 'block';
+    currentScheduleDiv.style.display = 'block';
+    editScheduleDiv.style.display = 'none';
+    editScheduleBtn.style.display = 'inline-block';
+    document.getElementById('edit-schedule-btn').addEventListener('click', function() {
+        currentScheduleContainer.style.display = 'none';
+        currentScheduleDiv.style.display = 'none';
+        editScheduleDiv.style.display = 'block';
+        editScheduleBtn.style.display = 'none';
+    });
+    loadTodaysWorkout();
+});
+
+function loadCurrentSchedule() {
+    const savedSchedule = JSON.parse(localStorage.getItem('schedule'));
+    if (savedSchedule) {
+        let scheduleHtml = '<h2>Current Schedule</h2><ul>';
+        for (const [day, activity] of Object.entries(savedSchedule)) {
+            scheduleHtml += `<li>${day}: ${activity}</li>`;
+            scheduleInputs[Object.keys(savedSchedule).indexOf(day)].value = activity; // populate input fields
+        }
+        scheduleHtml += '</ul>';
+        currentScheduleDiv.innerHTML = scheduleHtml;
+    }
+}
+
+
 onload = function() {
     showPage('dashboard');
     loadHistory();
     loadLastWorkout();
+    loadCurrentSchedule();
+    loadTodaysWorkout();
 }

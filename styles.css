@@ -340,3 +340,38 @@ textarea {
     font-family: 'Poppins', sans-serif;
     margin-left: 20px;
 }
+
+.schedule ul li {
+    text-align: left;
+    margin: 8px 0;
+    list-style: none;
+}
+
+.schedule {
+    padding: 20px;
+}
+
+#edit-schedule-btn, #save-schedule-btn {
+    background-color: var(--primary-clr);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#edit-schedule-btn:hover, #save-schedule-btn:hover {
+    background-color: var(--secondary-clr);
+    transform: scale(1.05);
+}
+
+#edit-schedule-btn {
+    margin-top: auto;
+}
+
+#current-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    line-height: 3.4rem;
+}
