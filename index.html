@@ -105,6 +105,17 @@
             </div>
             <div id="history" class="page" style="display: none;">
                 <h1 class="page-title">Workout History</h1>
+                <div class="filters">
+                    <select id="sort-options" class="card-shadow-radius">
+                        <option value="date-desc">Date: Newest to Oldest</option>
+                        <option value="date-asc">Date: Oldest to Newest</option>
+                        <option value="name-asc">Name: A to Z</option>
+                        <option value="name-desc">Name: Z to A</option>
+                        <option value="exercises-asc"># of Exercises: Low to High</option>
+                        <option value="exercises-desc"># of Exercises: High to Low</option>
+                    </select>
+                    <input type="text" id="search-bar" class="card-shadow-radius" placeholder="Search by workout name or date...">
+                </div>
                 <div class="widgets-container">
                     <table class="widget card-shadow-radius" id="history-table">
                         <thead>

@@ -11,8 +11,10 @@ const workoutForm = document.getElementById('workout-form');
 const lastWorkoutDiv = document.getElementById('last-workout');
 
 // loading table history
-const deleteBtn = document.getElementById('delete-btn');
-const viewBtn = document.getElementById('view-btn');
+const searchBtn = document.getElementById('search-btn');
+const searchInput = document.getElementById('search-bar');
+const sortOptions = document.getElementById('sort-options');
+const historyTable = document.getElementById('history-table');
 
 
 let currentWorkout = [];
@@ -79,11 +81,14 @@ saveWorkoutBtn.addEventListener('click', function() {
 
     localStorage.setItem('workouts', JSON.stringify(workouts)); // save back to localStorage
     currentWorkout = [];
-    workoutForm.elements[0].readOnly = false; // make date field editable for new session
-    workoutForm.elements[1].readOnly = false; // make name field editable for new session
+    workoutForm.elements[0].readOnly = false;
+    workoutForm.elements[0].value = ''; // clear date field
+    workoutForm.elements[1].readOnly = false;
+    workoutForm.elements[1].value = ''; // clear name field
     loadWorkoutSummary();
     loadHistory();
     loadLastWorkout();
+    
     numOfWorkouts++;
     alert('Workout session saved');
 });
@@ -109,7 +114,7 @@ function loadHistory() {
 
     let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
 
-    workouts.sort((a, b) => new Date(b.date) - new Date(a.date));
+   // workouts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     workouts.forEach((workout, index) => {
         historyList.innerHTML += `
@@ -204,5 +209,53 @@ function loadLastWorkout() {
     lastWorkoutDiv.innerHTML = detailHtml;
 }
 
-window.onload = loadLastWorkout();
-window.onload = loadHistory();
+function sortHistory() {
+    let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+    const sortBy = sortOptions.value;
+
+    if (sortBy === 'date-desc') {
+        workouts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (sortBy === 'date-asc') {
+        workouts.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else if (sortBy === 'exercises-desc') {
+        workouts.sort((a, b) => b.routine.length - a.routine.length);
+    } else if (sortBy === 'exercises-asc') {
+        workouts.sort((a, b) => a.routine.length - b.routine.length);
+    } else if (sortBy === 'name-asc') {
+        workouts.sort((a, b) => a.routine[0].name.localeCompare(b.routine[0].name));
+    } else if (sortBy === 'name-desc') {
+        workouts.sort((a, b) => b.routine[0].name.localeCompare(a.routine[0].name));
+    }
+
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+    loadHistory();
+    loadLastWorkout(); 
+    numOfWorkouts = workouts.length;
+}
+
+function searchHistory() {
+    const query = searchInput.value.toLowerCase();
+    const rows = historyTable.getElementsByTagName('tr');
+    
+    for (let i = 1; i < rows.length; i++) { // start from 1 to skip header row
+        const cells = rows[i].getElementsByTagName('td');
+        let match = false;
+        
+        for (let j = 0; j < cells.length - 1; j++) { // exclude last cell with buttons
+            if (cells[j].innerText.toLowerCase().includes(query)) {
+                match = true;
+                break;
+            }
+        }
+        
+        rows[i].style.display = match ? '' : 'none';
+    }
+}
+searchInput.addEventListener('input', searchHistory);
+sortOptions.addEventListener('change', sortHistory);
+
+onload = function() {
+    showPage('dashboard');
+    loadHistory();
+    loadLastWorkout();
+}
