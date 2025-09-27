@@ -58,7 +58,7 @@
                     </div>
                     <div>
                         <h2 class="widget-header">Today's Workout</h2>
-                        <div class="widget card-shadow-radius">
+                        <div class="widget card-shadow-radius" id="todays-workout">
                             <p>No workouts logged yet.</p> <!-- Placeholder for todays workout details -->
                         </div>
                     </div>
@@ -176,7 +176,53 @@
                     </div>
                 </div>
             </div>
-            <div id="changeSchedule" class="page" style="display: none;"></div>
+            <div id="changeSchedule" class="page" style="display: none;">
+                <h1 class="page-title">Schedule</h1>
+                <div id="schedule-container" class="widgets-container">
+                    <div class="card-shadow-radius widget schedule" id="current-schedule">
+                        <div id="current-schedule-div">
+                            <h2>Current Schedule</h2>
+                            <ul>
+                                <li>Monday:</li>
+                                <li>Tuesday:</li>
+                                <li>Wednesday:</li>
+                                <li>Thursday:</li>
+                                <li>Friday:</li>
+                                <li>Saturday:</li>
+                                <li>Sunday:</li>
+                            </ul>
+                        </div>
+                        <button id="edit-schedule-btn">Edit Schedule</button>
+                    </div>
+                    <div class="card-shadow-radius widget schedule" id="edit-schedule" style="display: none;">
+                        <h2>Edit Schedule</h2>
+                        <ul>
+                            <li>Monday:
+                                <input type="text" class="schedule-input" placeholder="e.g., Legs, Back">
+                            </li>
+                            <li>Tuesday:
+                                <input type="text" class="schedule-input" placeholder="e.g., Chest, Triceps">
+                            </li>
+                            <li>Wednesday:
+                                <input type="text" class="schedule-input" placeholder="e.g., Back, Biceps">
+                            </li>
+                            <li>Thursday:
+                                <input type="text" class="schedule-input" placeholder="e.g., Legs, Shoulders">
+                            </li>
+                            <li>Friday:
+                                <input type="text" class="schedule-input" placeholder="e.g., Full Body">
+                            </li>
+                            <li>Saturday:
+                                <input type="text" class="schedule-input" placeholder="e.g., Rest">
+                            </li>
+                            <li>Sunday:
+                                <input type="text" class="schedule-input" placeholder="e.g., Rest">
+                            </li>
+                        </ul>
+                        <button id="save-schedule-btn">Save Schedule</button>
+                    </div>
+                </div>
+            </div>
             <script src="script.js"></script>
         </main>
     </body>
